@@ -83,7 +83,7 @@ OpenProject::Application.routes.draw do
     match '/account/register', action: 'register', via: %i[get post patch]
     get '/account/activate', action: 'activate'
 
-    match '/login', action: 'login',  as: 'signin', via: %i[get post]
+    match '/login', action: 'login', as: 'signin', via: %i[get post]
     get '/login/internal', action: 'internal_login', as: 'internal_signin'
     get '/logout', action: 'logout', as: 'signout'
 
@@ -613,6 +613,8 @@ OpenProject::Application.routes.draw do
   # OAuthClient needs a "callback" URL that Nextcloud calls with a "code" (see OAuth2 RFC)
   scope 'oauth_clients/:oauth_client_id' do
     get 'callback', controller: 'oauth_clients', action: :callback
+    get 'ensure_access', controller: 'oauth_clients', action: :ensure_access, as: 'oauth_clients_ensure_access'
+    get 'status', controller: 'oauth_clients', action: :status, as: 'oauth_clients_status'
   end
 
   if OpenProject::Configuration.lookbook_enabled?

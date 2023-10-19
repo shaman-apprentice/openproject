@@ -31,13 +31,14 @@
 # This controller handles OAuth2 Authorization Code Grant redirects from a Authorization Server to
 # "callback" endpoint.
 class OAuthClientsController < ApplicationController
-  before_action :set_oauth_state
+  before_action :require_login, only: %i[ensure_access status]
+  before_action :set_oauth_state, only: [:callback]
   before_action :find_oauth_client
-  before_action :set_redirect_uri
-  before_action :set_code
+  before_action :set_redirect_uri, only: [:callback]
+  before_action :set_code, only: [:callback]
   before_action :set_connection_manager
 
-  after_action :clear_oauth_state_cookie
+  after_action :clear_oauth_state_cookie, only: [:callback]
 
   # Provide the OAuth2 "callback" endpoint.
   # The Authorization Server redirects
@@ -67,6 +68,20 @@ class OAuthClientsController < ApplicationController
       end
     end
   end
+
+  def ensure_access
+    case @connection_manager.authorization_state
+    when :connected
+      redirect_to oauth_clients_status_url(oauth_client_id: @oauth_client.client_id)
+    else
+      nonce = SecureRandom.uuid
+      cookies["oauth_state_#{nonce}"] = { value: oauth_clients_status_url(oauth_client_id: @oauth_client.client_id),
+                                          expires: 1.hour }
+      redirect_to(@connection_manager.get_authorization_uri(state: nonce))
+    end
+  end
+
+  def status; end
 
   private
 
