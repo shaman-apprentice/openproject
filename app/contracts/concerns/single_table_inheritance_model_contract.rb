@@ -30,7 +30,7 @@ module SingleTableInheritanceModelContract
   extend ActiveSupport::Concern
 
   included do
-    attribute model.inheritance_column
+    attribute name.deconstantize.singularize.constantize.inheritance_column
 
     validate do
       if model.type != model.class.sti_name
