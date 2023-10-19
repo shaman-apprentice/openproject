@@ -149,8 +149,8 @@ en:
         Are you sure you want to delete this storage? This will also delete the storage from all projects where it is used.
         Further, it will also delete all links from work packages to files that are stored in that storage.
       project_storage: >
-          Are you sure you want to delete %{file_storage} from this project? To confirm this action please
-          introduce the storage name in the field below, this will:
+        Are you sure you want to delete %{file_storage} from this project? To confirm this action please
+        introduce the storage name in the field below, this will:
       project_storage_delete_result_1: "Remove all links from work packages of this project to files and folders of that storage."
       project_storage_delete_result_2: "In case this storage has an automatically managed project folder, this and its files will be deleted forever."
       input_delete_confirmation: "Enter the file storage name %{file_storage} to confirm deletion."

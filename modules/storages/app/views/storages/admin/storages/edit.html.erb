@@ -29,9 +29,21 @@ See COPYRIGHT and LICENSE files for more details.
 
 <% html_title t(:label_administration), t("project_module_storages"), t('label_edit_x', x: @storage.name) %>
 
+
+
+    
 <% if OpenProject::FeatureDecisions.storage_primer_design_active? %>
+
+  <%= render(Primer::Beta::Breadcrumbs.new) do |component|
+    component.with_item(href: "admin/settings") { "Administration" }
+    component.with_item(href: "admin/settings/storages") { "File Storages" }
+    component.with_item(href: "admin/settings/storages/#{@storage.id}/edit") { @storage.name }
+  end %>
+
   <%= render(Primer::OpenProject::PageHeader.new) do |header| %>
+
     <% header.with_title(test_selector: 'storage-name-title') do %>
+      <%= render(OpPrimer::BackButtonComponent.new(href: url_for(controller: '/storages/admin/storages', action: :index))) %>
       <%= @storage.name %>
     <% end %>
 
